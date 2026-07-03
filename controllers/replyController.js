@@ -45,7 +45,7 @@ const deleteReply = async (req, res) => {
   try {
     const user_id = req.user_id;
     const { replyId } = req.params;
-    const deleteQuery = `DELETE FROM replytable WHERE reply_id = $1 AND user_id = $2`;
+    const deleteQuery = `UPDATE replytable SET isdeleted = TRUE WHERE reply_id = $1 AND user_id = $2 AND isdeleted = FALSE`;
     const result = await pool.query(deleteQuery, [replyId, user_id]);
     if (result.rowCount === 0) {
       return res.status(404).json({
