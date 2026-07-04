@@ -25,7 +25,9 @@ const getUserTweets = async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const offset = (page - 1) * limit;
-    const getTweetQuery = `SELECT * FROM tweettable WHERE user_id = $1 AND isdeleted = FALSE ORDER BY posted_at DESC OFFSET $2 LIMIT $3`;
+    const getTweetQuery = `SELECT tweet_id,
+        tweet,
+        posted_at FROM tweettable WHERE user_id = $1 AND isdeleted = FALSE ORDER BY posted_at DESC OFFSET $2 LIMIT $3`;
     const userTweets = await pool.query(getTweetQuery, [
       user_id,
       offset,
@@ -37,6 +39,9 @@ const getUserTweets = async (req, res) => {
       });
     }
     res.status(200).json({
+      page,
+      limit,
+      count: userTweets.rowCount,
       tweets: userTweets.rows,
     });
   } catch (e) {
