@@ -5,6 +5,7 @@ const {
   likeCount,
   likeTweet,
   unlikeTweet,
+  dislikeTweet,
 } = require("../controllers/likeController");
 const { validate } = require("../middleware/validate");
 const likeTweetValidation = require("../validators/likeValidation");
@@ -21,7 +22,7 @@ router.delete(
   authMiddleware,
   likeTweetValidation,
   validate,
-  unlikeTweet,
+  dislikeTweet,
 );
 (validate,
   router.get(

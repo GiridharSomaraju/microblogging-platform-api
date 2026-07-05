@@ -4,9 +4,9 @@ const { validate } = require("../middleware/validate");
 const authMiddleware = require("../middleware/authMiddleware");
 const {
   getMyProfile,
-  getUserProfile,
   searchProfile,
   tweetsFeed,
+  getProfileById,
 } = require("../controllers/profileController");
 const {
   getUserProfileValidation,
@@ -25,7 +25,7 @@ router.get(
   "/users/profile/:userId",
   getUserProfileValidation,
   validate,
-  getUserProfile,
+  getProfileById,
 );
 router.get("/users/tweets", authMiddleware, tweetsFeed);
 
