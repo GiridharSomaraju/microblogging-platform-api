@@ -1,28 +1,33 @@
 const express = require("express");
+
 const router = express.Router();
+
+// authentication middleware
 const authmiddleware = require("../middleware/authMiddleware");
+
+// controller
 const {
   replyTweet,
   getReplies,
   deleteReply,
 } = require("../controllers/replyController");
-const { validate } = require("../middleware/validate");
+
+// validation
 const {
   deleteReplyValidation,
   getRepliesValidation,
   replyTweetValidation,
 } = require("../validators/replyValidator");
 
-router.post(
-  "/reply/:tweetId",
-  authmiddleware,
-  replyTweetValidation,
-  validate,
-  replyTweet,
-);
-router.get("/reply/:tweetId", getRepliesValidation, validate, getReplies);
+// validation middleware
+const { validate } = require("../middleware/validate");
+
+router
+  .route("/tweets/:tweetId/replies")
+  .post(authmiddleware, replyTweetValidation, validate, replyTweet)
+  .get(getRepliesValidation, validate, getReplies);
 router.delete(
-  "/reply/:replyId",
+  "/replies/:replyId",
   authmiddleware,
   deleteReplyValidation,
   validate,
