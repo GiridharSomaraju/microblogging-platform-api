@@ -12,7 +12,10 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url:
+          process.env.NODE_ENV === "production"
+            ? "https://microblogging-platform-api.onrender.com"
+            : "http://localhost:3000",
       },
     ],
     components: {

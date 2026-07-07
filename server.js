@@ -31,6 +31,14 @@ app.use(
   swaggerUI.setup(swaggerSpec),
 );
 
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Microblogging Platform API is running 🚀",
+    documentation: "/api-docs",
+  });
+});
+
 app.use("/", userRoutes);
 app.use("/", tweetRoutes);
 app.use("/", followerRoutes);
