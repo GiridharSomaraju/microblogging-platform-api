@@ -34,7 +34,7 @@ app.use(
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Microblogging Platform API is running 🚀",
+    message: "Microblogging Platform API is running",
     documentation: "/api-docs",
   });
 });
