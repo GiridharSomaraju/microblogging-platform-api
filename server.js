@@ -1,5 +1,10 @@
 require("dotenv").config();
 
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
+
+//console.log(JSON.stringify(swaggerSpec, null, 2));
+
 const pool = require("./config/db");
 const express = require("express");
 
@@ -14,6 +19,17 @@ const profileRoutes = require("./routes/profileRoutes");
 const app = express();
 
 app.use(express.json());
+
+app.use("/api-docs", (req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
+app.use(
+  "/api-docs",
+  swaggerUI.serveFiles(swaggerSpec),
+  swaggerUI.setup(swaggerSpec),
+);
 
 app.use("/", userRoutes);
 app.use("/", tweetRoutes);

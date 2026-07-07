@@ -12,8 +12,8 @@ const followUser = async (req, res) => {
       });
     }
     const result = await followerModel.followUser(follower_user_id, userId);
-    res.status(200).json({
-      message: "user followed successfully",
+    res.status(201).json({
+      message: "Successfully started following the specified user",
     });
   } catch (e) {
     res.status(500).json({

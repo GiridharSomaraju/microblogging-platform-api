@@ -14,9 +14,9 @@ const likeTweet = async (req, res) => {
       });
     }
 
-    await likeModel.likeTweet(tweetId, user_id);
+    await likeModel.insertLike(tweetId, user_id);
     res.status(201).json({
-      message: "Liked Tweet Successfully",
+      message: "Successfully added a like to the specified tweet",
     });
   } catch (e) {
     return res.status(500).json({
@@ -39,7 +39,7 @@ const dislikeTweet = async (req, res) => {
     }
     await likeModel.dislikeTweet(tweetId, user_id);
     res.status(200).json({
-      message: "Tweet Unliked successfully",
+      message: "Successfully removed the like from the specified tweet",
     });
   } catch (e) {
     return res.status(500).json({

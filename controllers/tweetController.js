@@ -7,7 +7,7 @@ const insertTweet = async (req, res) => {
     const { tweet } = req.body;
     // model
     const createdTweet = await tweetModel.insertUserTweet(user_id, tweet);
-    res.status(200).json({
+    res.status(201).json({
       message: "Tweet posted successfully",
       tweet: createdTweet.rows[0],
     });

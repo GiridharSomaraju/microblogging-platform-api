@@ -15,7 +15,7 @@ const userRegister = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     await userModel.insertUser(name, email, hashedPassword, gender);
-    res.status(200).json({
+    res.status(201).json({
       message: "User registered successfully",
     });
   } catch (e) {

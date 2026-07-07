@@ -1,9 +1,9 @@
-const pool = require("../config/db")
+const pool = require("../config/db");
 
 // like tweet model
 
-const getLikeTweet = async(tweetId,user_id) => {
-    const query = `
+const getLikeTweet = async (tweetId, user_id) => {
+  const query = `
     SELECT 
         * 
     FROM 
@@ -13,36 +13,36 @@ const getLikeTweet = async(tweetId,user_id) => {
     AND 
         user_id = $2`;
 
-    return await pool.query(query, [tweetId, user_id]);
-}
+  return await pool.query(query, [tweetId, user_id]);
+};
 
-const insertLike = async(tweetId,user_id) => {
-    const query = `
-]   INSERT INTO 
+const insertLike = async (tweetId, user_id) => {
+  const query = `
+   INSERT INTO 
         liketable(tweet_id,user_id)
         VALUES($1,$2)`;
-    
-    return await pool.query(query, [tweetId, user_id]);
-}
+
+  return await pool.query(query, [tweetId, user_id]);
+};
 
 // dislike tweet model
 
-const dislikeTweet = async(tweetId,user_id) => {
-    const query = `
+const dislikeTweet = async (tweetId, user_id) => {
+  const query = `
     DELETE FROM 
         liketable 
     WHERE 
         tweet_id = $1 
     AND 
         user_id = $2;`;
-    
-    return await pool.query(query, [tweetId, user_id]);
-}
+
+  return await pool.query(query, [tweetId, user_id]);
+};
 
 // likes count model
 
-const likeCount = async(tweetId) => {
-    const query = `
+const likeCount = async (tweetId) => {
+  const query = `
     SELECT 
         COUNT(*) AS "likesCount" 
     FROM 
@@ -50,7 +50,7 @@ const likeCount = async(tweetId) => {
     WHERE 
         tweet_id = $1`;
 
-    return await pool.query(query, [tweetId]);
-}
+  return await pool.query(query, [tweetId]);
+};
 
-module.exports = {getLikeTweet,insertLike,dislikeTweet,likeCount}
+module.exports = { getLikeTweet, insertLike, dislikeTweet, likeCount };
