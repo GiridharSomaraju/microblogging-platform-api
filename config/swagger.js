@@ -60,7 +60,7 @@ const options = {
             },
             gender: {
               type: "string",
-              example: "Male",
+              example: "male",
             },
           },
         },
