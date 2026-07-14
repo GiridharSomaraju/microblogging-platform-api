@@ -3,15 +3,15 @@ const jwt = require("jsonwebtoken");
 
 const userModel = require("../models/userModel");
 
+const AppError = require("../utils/AppError");
+
 //user register
 const userRegister = async (req, res) => {
   try {
     const { name, email, password, gender } = req.body;
     const dbUser = await userModel.getUser(email);
     if (dbUser.rows.length !== 0) {
-      return res.status(401).json({
-        message: "user already exists",
-      });
+      return next(new AppError("User Already Exists", 401));
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     await userModel.insertUser(name, email, hashedPassword, gender);
