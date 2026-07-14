@@ -16,6 +16,10 @@ const likeRoutes = require("./routes/likeRoutes");
 const replyRoutes = require("./routes/replyRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 
+// errorHandle middleware
+
+const errorHandler = require("./middleware/errorHandler");
+
 const app = express();
 
 app.use(express.json());
@@ -39,12 +43,18 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/test-error", (req, res, next) => {
+  next(new Error("Testing global Error Handler"));
+});
+
 app.use("/", userRoutes);
 app.use("/", tweetRoutes);
 app.use("/", followerRoutes);
 app.use("/", likeRoutes);
 app.use("/", replyRoutes);
 app.use("/", profileRoutes);
+
+app.use(errorHandler);
 
 const databaseServerConnection = async () => {
   try {
