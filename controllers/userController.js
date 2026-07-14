@@ -6,35 +6,32 @@ const userModel = require("../models/userModel");
 const AppError = require("../utils/AppError");
 
 //user register
-const userRegister = async (req, res) => {
+const userRegister = async (req, res, next) => {
   try {
     const { name, email, password, gender } = req.body;
     const dbUser = await userModel.getUser(email);
     if (dbUser.rows.length !== 0) {
-      return next(new AppError("User Already Exists", 401));
+      return next(new AppError("User Already Exists", 409));
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     await userModel.insertUser(name, email, hashedPassword, gender);
     res.status(201).json({
+      success: true,
       message: "User registered successfully",
     });
-  } catch (e) {
-    return res.status(500).json({
-      error: e.message,
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
 //login user
 
-const userLogin = async (req, res) => {
+const userLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const dbUser = await userModel.getUser(email);
     if (dbUser.rows.length === 0) {
-      return res.status(404).json({
-        message: "user not found",
-      });
+      return next(new AppError("User not Found", 404));
     }
     const userDetails = dbUser.rows[0];
     //  password checking
@@ -42,28 +39,24 @@ const userLogin = async (req, res) => {
       password,
       userDetails.password,
     );
-    if (isPasswordMatched) {
-      // payload
-      const payload = {
-        user_id: userDetails.user_id,
-      };
-      // token generation
-      const jwtToken = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-        expiresIn: "1h",
-      });
-      // response
-      res.status(200).json({
-        jwtToken: jwtToken,
-      });
-    } else {
-      res.status(401).json({
-        message: "Invalid Credentials",
-      });
+    if (!isPasswordMatched) {
+      return next(new AppError("Invalid Credentials", 401));
     }
-  } catch (e) {
-    return res.status(500).json({
-      error: e.message,
+    // payload
+    const payload = {
+      user_id: userDetails.user_id,
+    };
+    // token generation
+    const jwtToken = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h",
     });
+    // response
+    res.status(200).json({
+      success: true,
+      jwtToken: jwtToken,
+    });
+  } catch (error) {
+    next(error);
   }
 };
 
