@@ -1,65 +1,53 @@
 const replyModel = require("../models/replyModel");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/AppError");
 
 // reply tweet API
-const replyTweet = async (req, res) => {
-  try {
-    const user_id = req.user_id;
-    const { tweetId } = req.params;
-    const { reply } = req.body;
+const replyTweet = catchAsync(async (req, res, next) => {
+  const user_id = req.user_id;
+  const { tweetId } = req.params;
+  const { reply } = req.body;
 
-    await replyModel.replyTweet(reply, tweetId, user_id);
-    res.status(201).json({
-      message: "Reply Inserted Successfully",
-    });
-  } catch (e) {
-    return res.status(500).json({
-      message: e.message,
-    });
-  }
-};
+  await replyModel.replyTweet(reply, tweetId, user_id);
+  res.status(201).json({
+    success: true,
+    message: "Reply Inserted Successfully",
+  });
+});
 
 // get reply API
-const getReplies = async (req, res) => {
-  try {
-    const { tweetId } = req.params;
+const getReplies = catchAsync(async (req, res, next) => {
+  const { tweetId } = req.params;
 
-    const replies = await replyModel.getReplies(tweetId);
-    if (replies.rowCount === 0) {
-      return res.status(200).json({
-        message: "No replies for this tweet",
-      });
-    }
-    res.status(200).json({
-      replies: replies.rows,
-    });
-  } catch (e) {
-    return res.status(500).json({
-      message: e.message,
-    });
+  const replies = await replyModel.getReplies(tweetId);
+  if (replies.rowCount === 0) {
+    return next(new AppError("No replies for this tweet", 200));
   }
-};
+  res.status(200).json({
+    success: true,
+    replies: replies.rows,
+  });
+});
 
 // delete reply API
 
-const deleteReply = async (req, res) => {
-  try {
-    const user_id = req.user_id;
-    const { replyId } = req.params;
+const deleteReply = catchAsync(async (req, res, next) => {
+  const user_id = req.user_id;
+  const { replyId } = req.params;
 
-    const result = await replyModel.deleteReply(replyId, user_id);
-    if (result.rowCount === 0) {
-      return res.status(404).json({
-        message: "Reply not found or you are not authorized to delete it.",
-      });
-    }
-    res.status(200).json({
-      message: "Reply Deleted Successfully",
-    });
-  } catch (e) {
-    return res.status(500).json({
-      message: e.message,
-    });
+  const result = await replyModel.deleteReply(replyId, user_id);
+  if (result.rowCount === 0) {
+    return next(
+      new AppError(
+        "Reply not found or you are not authorized to delete it.",
+        404,
+      ),
+    );
   }
-};
+  res.status(200).json({
+    success: true,
+    message: "Reply Deleted Successfully",
+  });
+});
 
 module.exports = { replyTweet, getReplies, deleteReply };

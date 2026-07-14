@@ -1,68 +1,51 @@
-
 const likeModel = require("../models/likeModel");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/AppError");
+
 //like a tweet API
 
-const likeTweet = async (req, res) => {
-  try {
-    const user_id = req.user_id;
-    const { tweetId } = req.params;
+const likeTweet = catchAsync(async (req, res, next) => {
+  const user_id = req.user_id;
+  const { tweetId } = req.params;
 
-    const resultTweet = await likeModel.getLikeTweet(tweetId, user_id);
-    if (resultTweet.rowCount != 0) {
-      return res.status(400).json({
-        message: "you already liked this tweet",
-      });
-    }
-
-    await likeModel.insertLike(tweetId, user_id);
-    res.status(201).json({
-      message: "Successfully added a like to the specified tweet",
-    });
-  } catch (e) {
-    return res.status(500).json({
-      message: e.message,
-    });
+  const resultTweet = await likeModel.getLikeTweet(tweetId, user_id);
+  if (resultTweet.rowCount != 0) {
+    return next(new AppError("you already liked this tweet", 400));
   }
-};
+
+  await likeModel.insertLike(tweetId, user_id);
+  res.status(201).json({
+    success: true,
+    message: "Successfully added a like to the specified tweet",
+  });
+});
 
 // unlike a tweet API
 
-const dislikeTweet = async (req, res) => {
-  try {
-    const user_id = req.user_id;
-    const { tweetId } = req.params;
-    const resultTweet = await likeModel.getLikeTweet(tweetId, user_id);
-    if (resultTweet.rowCount === 0) {
-      return res.status(400).json({
-        message: "you didn't liked this tweet",
-      });
-    }
-    await likeModel.dislikeTweet(tweetId, user_id);
-    res.status(200).json({
-      message: "Successfully removed the like from the specified tweet",
-    });
-  } catch (e) {
-    return res.status(500).json({
-      message: e.message,
-    });
+const dislikeTweet = catchAsync(async (req, res, next) => {
+  const user_id = req.user_id;
+  const { tweetId } = req.params;
+  const resultTweet = await likeModel.getLikeTweet(tweetId, user_id);
+  if (resultTweet.rowCount === 0) {
+    return next(new AppError("you didn't liked this tweet", 400));
   }
-};
+  await likeModel.dislikeTweet(tweetId, user_id);
+  res.status(200).json({
+    success: true,
+    message: "Successfully removed the like from the specified tweet",
+  });
+});
 
 // tweet like count API
 
-const likeCount = async (req, res) => {
-  try {
-    const { tweetId } = req.params;
+const likeCount = catchAsync(async (req, res, next) => {
+  const { tweetId } = req.params;
 
-    const result = await likeModel.likeCount(tweetId);
-    res.status(200).json({
-      count: result.rows[0].likesCount,
-    });
-  } catch (e) {
-    return res.status(500).json({
-      message: e.message,
-    });
-  }
-};
+  const result = await likeModel.likeCount(tweetId);
+  res.status(200).json({
+    success: true,
+    count: result.rows[0].likesCount,
+  });
+});
 
 module.exports = { likeTweet, dislikeTweet, likeCount };

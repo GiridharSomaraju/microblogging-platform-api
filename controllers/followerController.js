@@ -1,102 +1,74 @@
 const followerModel = require("../models/followerModel");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/AppError");
 
 //follower API
 
-const followUser = async (req, res) => {
-  try {
-    const follower_user_id = req.user_id;
-    const { userId } = req.params;
-    if (follower_user_id === Number(userId)) {
-      return res.status(400).send({
-        message: "You cannot follow yourself",
-      });
-    }
-    const result = await followerModel.followUser(follower_user_id, userId);
-    res.status(201).json({
-      message: "Successfully started following the specified user",
-    });
-  } catch (e) {
-    res.status(500).json({
-      error: e.message,
-    });
+const followUser = catchAsync(async (req, res, next) => {
+  const follower_user_id = req.user_id;
+  const { userId } = req.params;
+  if (follower_user_id === Number(userId)) {
+    return next(new AppError("You cannot follow yourself", 400));
   }
-};
+  const result = await followerModel.followUser(follower_user_id, userId);
+  res.status(201).json({
+    success: true,
+    message: "Successfully started following the specified user",
+  });
+});
 
 //unfollow a user API
 
-const unfollowUser = async (req, res) => {
-  try {
-    const follower_user_id = req.user_id;
-    const { userId } = req.params;
-    if (follower_user_id === Number(userId)) {
-      return res.status(400).json({
-        message: "You cannot unfollow yourself",
-      });
-    }
-
-    const resultFollower = await followerModel.getFollowUser(
-      follower_user_id,
-      userId,
-    );
-    if (resultFollower.rowCount === 0) {
-      return res.status(404).json({
-        message: "You are not following this user",
-      });
-    }
-    const result = await followerModel.unfollowUser(follower_user_id, userId);
-    res.status(200).json({
-      message: "user unfollowed successfully",
-    });
-  } catch (e) {
-    res.status(500).json({
-      error: e.message,
-    });
+const unfollowUser = catchAsync(async (req, res, next) => {
+  const follower_user_id = req.user_id;
+  const { userId } = req.params;
+  if (follower_user_id === Number(userId)) {
+    return next(new AppError("You cannot unfollow yourself", 400));
   }
-};
+
+  const resultFollower = await followerModel.getFollowUser(
+    follower_user_id,
+    userId,
+  );
+  if (resultFollower.rowCount === 0) {
+    return next(new AppError("You are not following this user", 404));
+  }
+  const result = await followerModel.unfollowUser(follower_user_id, userId);
+  res.status(200).json({
+    success: true,
+    message: "user unfollowed successfully",
+  });
+});
 
 // get following users API
 
-const getFollowingUsers = async (req, res) => {
-  try {
-    const follower_user_id = req.user_id;
+const getFollowingUsers = catchAsync(async (req, res, next) => {
+  const follower_user_id = req.user_id;
 
-    const result = await followerModel.getFollowingUsers(follower_user_id);
-    if (result.rowCount === 0) {
-      return res.status(200).json({
-        message: "You are not following any user yet",
-      });
-    }
-    res.status(200).json({
-      followingUsers: result.rows,
-    });
-  } catch (e) {
-    return res.status(500).json({
-      message: e.message,
-    });
+  const result = await followerModel.getFollowingUsers(follower_user_id);
+  if (result.rowCount === 0) {
+    return next(new AppError("You are not following any user yet", 200));
   }
-};
+  res.status(200).json({
+    success: true,
+    followingUsers: result.rows,
+  });
+});
 
 // get my followers  API
 
-const getFollowedUsers = async (req, res) => {
-  try {
-    const follower_user_id = req.user_id;
+const getFollowedUsers = catchAsync(async (req, res, next) => {
+  const follower_user_id = req.user_id;
 
-    const result = await followerModel.getFollowedUsers(follower_user_id);
-    if (result.rowCount === 0) {
-      return res.status(200).json({
-        followers: "You are not followed by any user yet",
-      });
-    }
-    res.status(200).json({
-      follwers: result.rows,
-    });
-  } catch (e) {
-    return res.status(500).json({
-      message: e.message,
-    });
+  const result = await followerModel.getFollowedUsers(follower_user_id);
+  if (result.rowCount === 0) {
+    return next(new AppError("You are not followed by any user yet", 200));
   }
-};
+  res.status(200).json({
+    success: true,
+    follwers: result.rows,
+  });
+});
 
 module.exports = {
   followUser,
