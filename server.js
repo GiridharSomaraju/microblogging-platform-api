@@ -18,6 +18,7 @@ const profileRoutes = require("./routes/profileRoutes");
 
 // errorHandle middleware
 
+const AppError = require("./utils/AppError");
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
@@ -43,16 +44,16 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/test-error", (req, res, next) => {
-  next(new Error("Testing global Error Handler"));
-});
-
 app.use("/", userRoutes);
 app.use("/", tweetRoutes);
 app.use("/", followerRoutes);
 app.use("/", likeRoutes);
 app.use("/", replyRoutes);
 app.use("/", profileRoutes);
+
+app.all("/{*splat}", (req, res, next) => {
+  next(new AppError(`Route ${req.originalUrl} not found`, 404));
+}); 
 
 app.use(errorHandler);
 
