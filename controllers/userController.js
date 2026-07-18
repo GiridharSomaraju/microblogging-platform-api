@@ -10,7 +10,7 @@ const userRegister = catchAsync(async (req, res, next) => {
   const { name, email, password, gender } = req.body;
   const dbUser = await userModel.getUser(email);
   if (dbUser.rows.length !== 0) {
-    return next(new AppError("User Already Exists", 409));
+    return next(new AppError("Email Already Exists", 409));
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   await userModel.insertUser(name, email, hashedPassword, gender);

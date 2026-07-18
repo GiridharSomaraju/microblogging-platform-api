@@ -3,7 +3,6 @@ require("dotenv").config();
 const swaggerUI = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
-//console.log(JSON.stringify(swaggerSpec, null, 2));
 
 const pool = require("./config/db");
 const express = require("express");
