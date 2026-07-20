@@ -3,7 +3,6 @@ require("dotenv").config();
 const swaggerUI = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
-
 const pool = require("./config/db");
 const express = require("express");
 
@@ -19,10 +18,13 @@ const profileRoutes = require("./routes/profileRoutes");
 
 const AppError = require("./utils/AppError");
 const errorHandler = require("./middleware/errorHandler");
+const loggerMiddleware = require("./middleware/loggerMiddleware");
 
 const app = express();
 
 app.use(express.json());
+
+app.use(loggerMiddleware);
 
 app.use("/api-docs", (req, res, next) => {
   res.set("Cache-Control", "no-store");
@@ -52,7 +54,7 @@ app.use("/", profileRoutes);
 
 app.all("/{*splat}", (req, res, next) => {
   next(new AppError(`Route ${req.originalUrl} not found`, 404));
-}); 
+});
 
 app.use(errorHandler);
 

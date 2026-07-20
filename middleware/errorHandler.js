@@ -1,6 +1,8 @@
 const handlePostgreError = require("../utils/handlePostgreError");
 
 const errorHandler = (err, req, res, next) => {
+  console.log(err);
+
   if (err.code) {
     err = handlePostgreError(err);
   }
