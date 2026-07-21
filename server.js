@@ -5,6 +5,7 @@ const swaggerSpec = require("./config/swagger");
 
 const pool = require("./config/db");
 const express = require("express");
+const morgan = require("morgan");
 
 //routes
 const userRoutes = require("./routes/userRoutes");
@@ -24,7 +25,9 @@ const app = express();
 
 app.use(express.json());
 
-app.use(loggerMiddleware);
+app.use(morgan("dev"));
+
+//app.use(loggerMiddleware);
 
 app.use("/api-docs", (req, res, next) => {
   res.set("Cache-Control", "no-store");
