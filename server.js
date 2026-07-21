@@ -6,6 +6,7 @@ const swaggerSpec = require("./config/swagger");
 const pool = require("./config/db");
 const express = require("express");
 const morgan = require("morgan");
+const helmet = require("helmet");
 
 //routes
 const userRoutes = require("./routes/userRoutes");
@@ -24,6 +25,10 @@ const loggerMiddleware = require("./middleware/loggerMiddleware");
 const app = express();
 
 app.use(express.json());
+
+app.disable("x-powered-by"); // Hide Express
+
+app.use(helmet()); // Add security headers
 
 app.use(morgan("dev"));
 

@@ -37,19 +37,19 @@ This project also became my way of learning PostgreSQL properly — writing real
 
 ## 🛠 Tech Stack
 
-| Category | Technology |
-|---|---|
-| Runtime | Node.js |
-| Framework | Express.js |
-| Database | PostgreSQL |
-| DB Hosting | Supabase |
-| Authentication | JWT (jsonwebtoken) |
-| Password Hashing | bcrypt |
-| Validation | express-validator |
-| API Docs | Swagger UI + swagger-jsdoc |
-| DB Driver | pg |
-| Config | dotenv |
-| Deployment | Render |
+| Category         | Technology                 |
+| ---------------- | -------------------------- |
+| Runtime          | Node.js                    |
+| Framework        | Express.js                 |
+| Database         | PostgreSQL                 |
+| DB Hosting       | Supabase                   |
+| Authentication   | JWT (jsonwebtoken)         |
+| Password Hashing | bcrypt                     |
+| Validation       | express-validator          |
+| API Docs         | Swagger UI + swagger-jsdoc |
+| DB Driver        | pg                         |
+| Config           | dotenv                     |
+| Deployment       | Render                     |
 
 ## 🏗 Project Architecture
 
@@ -173,12 +173,12 @@ The database is PostgreSQL, hosted on Supabase for this project.
 
 Core tables:
 
-| Table | Purpose |
-|---|---|
-| `users` | User accounts, hashed passwords |
-| `tweets` | Tweets, linked to `users.id` |
-| `replies` | Replies, linked to `tweets.id` and `users.id` |
-| `likes` | Join table between `users` and `tweets` |
+| Table     | Purpose                                              |
+| --------- | ---------------------------------------------------- |
+| `users`   | User accounts, hashed passwords                      |
+| `tweets`  | Tweets, linked to `users.id`                         |
+| `replies` | Replies, linked to `tweets.id` and `users.id`        |
+| `likes`   | Join table between `users` and `tweets`              |
 | `follows` | Join table tracking follower/following relationships |
 
 ## 📖 API Documentation (Swagger)
@@ -227,58 +227,58 @@ Passwords are never stored in plain text — they're hashed with `bcrypt` before
 
 ### Authentication
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| POST | `/auth/register` | Register a new user | ❌ |
-| POST | `/auth/login` | Log in and receive a JWT | ❌ |
+| Method | Endpoint         | Description              | Auth Required |
+| ------ | ---------------- | ------------------------ | ------------- |
+| POST   | `/auth/register` | Register a new user      | ❌            |
+| POST   | `/auth/login`    | Log in and receive a JWT | ❌            |
 
 ### Users
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| GET | `/users/me` | Get current logged-in user's profile | ✅ |
-| GET | `/users/:userId` | Get a specific user's public profile | ✅ |
-| GET | `/users/search?name=john` | Search users by name | ✅ |
+| Method | Endpoint                  | Description                          | Auth Required |
+| ------ | ------------------------- | ------------------------------------ | ------------- |
+| GET    | `/users/me`               | Get current logged-in user's profile | ✅            |
+| GET    | `/users/:userId`          | Get a specific user's public profile | ✅            |
+| GET    | `/users/search?name=john` | Search users by name                 | ✅            |
 
 ### Tweets
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| POST | `/users/me/tweets` | Create a new tweet | ✅ |
-| GET | `/users/me/tweets` | Get current user's tweets | ✅ |
-| DELETE | `/users/me/tweets/:tweetId` | Delete a single tweet | ✅ |
-| DELETE | `/users/me/tweets` | Delete multiple tweets (bulk) | ✅ |
+| Method | Endpoint                    | Description                   | Auth Required |
+| ------ | --------------------------- | ----------------------------- | ------------- |
+| POST   | `/users/me/tweets`          | Create a new tweet            | ✅            |
+| GET    | `/users/me/tweets`          | Get current user's tweets     | ✅            |
+| DELETE | `/users/me/tweets/:tweetId` | Delete a single tweet         | ✅            |
+| DELETE | `/users/me/tweets`          | Delete multiple tweets (bulk) | ✅            |
 
 ### Feed
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| GET | `/feed` | Get personalized feed from followed users | ✅ |
+| Method | Endpoint | Description                               | Auth Required |
+| ------ | -------- | ----------------------------------------- | ------------- |
+| GET    | `/feed`  | Get personalized feed from followed users | ✅            |
 
 ### Followers
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| POST | `/users/:userId/follow` | Follow a user | ✅ |
-| DELETE | `/users/:userId/follow` | Unfollow a user | ✅ |
-| GET | `/users/me/followers` | List current user's followers | ✅ |
-| GET | `/users/me/following` | List users the current user follows | ✅ |
+| Method | Endpoint                | Description                         | Auth Required |
+| ------ | ----------------------- | ----------------------------------- | ------------- |
+| POST   | `/users/:userId/follow` | Follow a user                       | ✅            |
+| DELETE | `/users/:userId/follow` | Unfollow a user                     | ✅            |
+| GET    | `/users/me/followers`   | List current user's followers       | ✅            |
+| GET    | `/users/me/following`   | List users the current user follows | ✅            |
 
 ### Likes
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| POST | `/tweets/:tweetId/like` | Like a tweet | ✅ |
-| DELETE | `/tweets/:tweetId/like` | Unlike a tweet | ✅ |
-| GET | `/tweets/:tweetId/likes` | List users who liked a tweet | ✅ |
+| Method | Endpoint                 | Description                  | Auth Required |
+| ------ | ------------------------ | ---------------------------- | ------------- |
+| POST   | `/tweets/:tweetId/like`  | Like a tweet                 | ✅            |
+| DELETE | `/tweets/:tweetId/like`  | Unlike a tweet               | ✅            |
+| GET    | `/tweets/:tweetId/likes` | List users who liked a tweet | ✅            |
 
 ### Replies
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| POST | `/tweets/:tweetId/replies` | Reply to a tweet | ✅ |
-| GET | `/tweets/:tweetId/replies` | Get all replies to a tweet | ✅ |
-| DELETE | `/replies/:replyId` | Delete a reply | ✅ |
+| Method | Endpoint                   | Description                | Auth Required |
+| ------ | -------------------------- | -------------------------- | ------------- |
+| POST   | `/tweets/:tweetId/replies` | Reply to a tweet           | ✅            |
+| GET    | `/tweets/:tweetId/replies` | Get all replies to a tweet | ✅            |
+| DELETE | `/replies/:replyId`        | Delete a reply             | ✅            |
 
 ## 🚀 Deployment
 
@@ -313,9 +313,7 @@ Example validation response:
 ```json
 {
   "success": false,
-  "errors": [
-    { "field": "email", "message": "Must be a valid email address" }
-  ]
+  "errors": [{ "field": "email", "message": "Must be a valid email address" }]
 }
 ```
 
@@ -355,7 +353,5 @@ Aspiring Backend Developer | Node.js · Express · PostgreSQL
 
 I'm a CS graduate learning backend development hands-on through projects like this one. Feel free to check out my other work or connect with me.
 
-- GitHub: [add your GitHub profile link]
-- LinkedIn: [add your LinkedIn profile link]
-
-
+- GitHub: https://github.com/GiridharSomaraju
+- LinkedIn: www.linkedin.com/in/somaraju-giridhar
