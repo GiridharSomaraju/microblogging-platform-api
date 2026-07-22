@@ -25,7 +25,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /users/me/tweets:
+ * /api/v1/users/me/tweets:
  *   post:
  *     summary: Create a new tweet
  *     tags:
@@ -49,7 +49,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /users/me/tweets:
+ * /api/v1/users/me/tweets:
  *   get:
  *     summary: Get logged-in user's tweets
  *     tags:
@@ -80,7 +80,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /users/me/tweets:
+ * /api/v1/users/me/tweets:
  *   delete:
  *     summary: Delete multiple tweets
  *     tags:
@@ -103,7 +103,7 @@ const { validate } = require("../middleware/validate");
  */
 
 router
-  .route("/users/me/tweets")
+  .route("/api/v1/users/me/tweets")
   .post(authMiddleware, tweetValidation, validate, insertTweet)
   .get(authMiddleware, paginationValidation, validate, getUserTweets)
   .delete(
@@ -115,7 +115,7 @@ router
 
 /**
  * @swagger
- * /users/me/tweets/{tweetId}:
+ * /api/v1/users/me/tweets/{tweetId}:
  *   delete:
  *     summary: Delete a tweet
  *     tags:
@@ -140,7 +140,7 @@ router
  */
 
 router.delete(
-  "/users/me/tweets/:tweetId",
+  "/api/v1/users/me/tweets/:tweetId",
   authMiddleware,
   deleteTweetValidation,
   validate,

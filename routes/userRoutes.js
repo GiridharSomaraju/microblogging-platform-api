@@ -13,7 +13,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /auth/register:
+ * /api/v1/auth/register:
  *   post:
  *     summary: Register a new user
  *     tags:
@@ -31,11 +31,16 @@ const { validate } = require("../middleware/validate");
  *         description: Validation error
  */
 
-router.post("/auth/register", registerValidation, validate, userRegister);
+router.post(
+  "/api/v1/auth/register",
+  registerValidation,
+  validate,
+  userRegister,
+);
 
 /**
  * @swagger
- * /auth/login:
+ * /api/v1/auth/login:
  *   post:
  *     summary: Login user
  *     tags:
@@ -53,6 +58,6 @@ router.post("/auth/register", registerValidation, validate, userRegister);
  *         description: Validation error
  */
 
-router.post("/auth/login", loginValidation, validate, userLogin);
+router.post("/api/v1/auth/login", loginValidation, validate, userLogin);
 
 module.exports = router;

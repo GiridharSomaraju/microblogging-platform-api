@@ -20,7 +20,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /tweets/{tweetId}/like:
+ * /api/v1/tweets/{tweetId}/like:
  *   post:
  *     summary: Like a tweet
  *     tags:
@@ -48,7 +48,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /tweets/{tweetId}/like:
+ * /api/v1/tweets/{tweetId}/like:
  *   delete:
  *     summary: Remove like from a tweet
  *     tags:
@@ -75,13 +75,13 @@ const { validate } = require("../middleware/validate");
  */
 
 router
-  .route("/tweets/:tweetId/like")
+  .route("/api/v1/tweets/:tweetId/like")
   .post(authMiddleware, likeTweetValidation, validate, likeTweet)
   .delete(authMiddleware, likeTweetValidation, validate, dislikeTweet);
 
 /**
  * @swagger
- * /tweets/{tweetId}/likes:
+ * /api/v1/tweets/{tweetId}/likes:
  *   get:
  *     summary: Get like count of a tweet
  *     tags:
@@ -108,7 +108,7 @@ router
  */
 
 router.get(
-  "/tweets/:tweetId/likes",
+  "/api/v1/tweets/:tweetId/likes",
   authMiddleware,
   likeTweetValidation,
   validate,

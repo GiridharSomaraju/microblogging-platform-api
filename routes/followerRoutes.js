@@ -24,7 +24,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /users/{userId}/follow:
+ * /api/v1/users/{userId}/follow:
  *   post:
  *     summary: Follow a user
  *     tags:
@@ -52,7 +52,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /users/{userId}/follow:
+ * /api/v1/users/{userId}/follow:
  *   delete:
  *     summary: Unfollow a user
  *     tags:
@@ -79,13 +79,13 @@ const { validate } = require("../middleware/validate");
  */
 
 router
-  .route("/users/:userId/follow")
+  .route("/api/v1/users/:userId/follow")
   .post(authMiddleware, followUserValidation, validate, followUser)
   .delete(authMiddleware, followUserValidation, validate, unfollowUser);
 
 /**
  * @swagger
- * /users/me/following:
+ * /api/v1/users/me/following:
  *   get:
  *     summary: Get users followed by the logged-in user
  *     tags:
@@ -101,7 +101,7 @@ router
 
 /**
  * @swagger
- * /users/me/followers:
+ * /api/v1/users/me/followers:
  *   get:
  *     summary: Get followers of the logged-in user
  *     tags:
@@ -116,14 +116,14 @@ router
  */
 
 router.get(
-  "/users/me/following",
+  "/api/v1/users/me/following",
   authMiddleware,
   followValidation,
   validate,
   getFollowingUsers,
 );
 router.get(
-  "/users/me/followers",
+  "/api/v1/users/me/followers",
   authMiddleware,
   followValidation,
   validate,

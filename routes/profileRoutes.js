@@ -25,7 +25,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /users/search:
+ * /api/v1/users/search:
  *   get:
  *     summary: Search users by name
  *     tags:
@@ -50,7 +50,7 @@ const { validate } = require("../middleware/validate");
  */
 
 router.get(
-  "/users/search",
+  "/api/v1/users/search",
   authMiddleware,
   profileSearchValidation,
   validate,
@@ -59,7 +59,7 @@ router.get(
 
 /**
  * @swagger
- * /users/me:
+ * /api/v1/users/me:
  *   get:
  *     summary: Get logged-in user's profile
  *     tags:
@@ -73,11 +73,11 @@ router.get(
  *         description: Authentication token is missing or invalid
  */
 
-router.get("/users/me", authMiddleware, getMyProfile);
+router.get("/api/v1/users/me", authMiddleware, getMyProfile);
 
 /**
  * @swagger
- * /users/{userId}:
+ * /api/v1/users/{userId}:
  *   get:
  *     summary: Get user profile by ID
  *     tags:
@@ -102,7 +102,7 @@ router.get("/users/me", authMiddleware, getMyProfile);
  */
 
 router.get(
-  "/users/:userId",
+  "/api/v1/users/:userId",
   authMiddleware,
   getUserProfileValidation,
   validate,
@@ -111,7 +111,7 @@ router.get(
 
 /**
  * @swagger
- * /feed:
+ * /api/v1/feed:
  *   get:
  *     summary: Get personalized tweet feed
  *     tags:
@@ -124,6 +124,12 @@ router.get(
  *       401:
  *         description: Authentication token is missing or invalid
  */
-router.get("/feed", authMiddleware, feedValidation, validate, tweetsFeed);
+router.get(
+  "/api/v1/feed",
+  authMiddleware,
+  feedValidation,
+  validate,
+  tweetsFeed,
+);
 
 module.exports = router;

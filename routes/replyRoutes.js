@@ -24,7 +24,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /tweets/{tweetId}/replies:
+ * /api/v1/tweets/{tweetId}/replies:
  *   post:
  *     summary: Reply to a tweet
  *     tags:
@@ -58,7 +58,7 @@ const { validate } = require("../middleware/validate");
 
 /**
  * @swagger
- * /tweets/{tweetId}/replies:
+ * /api/v1/tweets/{tweetId}/replies:
  *   get:
  *     summary: Get all replies for a tweet
  *     tags:
@@ -81,13 +81,13 @@ const { validate } = require("../middleware/validate");
  */
 
 router
-  .route("/tweets/:tweetId/replies")
+  .route("/api/v1/tweets/:tweetId/replies")
   .post(authmiddleware, replyTweetValidation, validate, replyTweet)
   .get(getRepliesValidation, validate, getReplies);
 
 /**
  * @swagger
- * /replies/{replyId}:
+ * /api/v1/replies/{replyId}:
  *   delete:
  *     summary: Delete a reply
  *     tags:
@@ -114,7 +114,7 @@ router
  */
 
 router.delete(
-  "/replies/:replyId",
+  "/api/v1/replies/:replyId",
   authmiddleware,
   deleteReplyValidation,
   validate,
