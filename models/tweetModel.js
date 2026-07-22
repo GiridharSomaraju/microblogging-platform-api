@@ -11,7 +11,8 @@ const insertUserTweet = async (user_id, tweet) => {
 };
 
 // getting user tweet model
-const getTweetsByUser = async (user_id, limit, offset) => {
+const getTweetsByUser = async (user_id, limit, offset, sort) => {
+  const order = sort === "latest" ? "DESC" : "ASC";
   const query = `
         SELECT tweet_id,
                 tweet,
@@ -21,7 +22,7 @@ const getTweetsByUser = async (user_id, limit, offset) => {
         WHERE 
             user_id = $1 AND isdeleted = FALSE 
         ORDER BY 
-            posted_at DESC 
+            posted_at ${order} 
         OFFSET $2 
         LIMIT $3`;
   return await pool.query(query, [user_id, offset, limit]);

@@ -19,13 +19,25 @@ const insertTweet = catchAsync(async (req, res, next) => {
 //Get all tweets
 const getUserTweets = catchAsync(async (req, res, next) => {
   const user_id = req.user_id;
+  const sort = req.query.sort || "latest";
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
   const offset = (page - 1) * limit;
 
+  const allowedSorts = ["latest", "oldest"];
+
+  if (!allowedSorts.includes(sort)) {
+    return next(
+      new AppError(
+        "Invalid sort option. Allowed values are latest, oldest",
+        400,
+      ),
+    );
+  }
+
   // execute both quries in parallel
   const [userTweets, totalTweets] = await Promise.all([
-    await tweetModel.getTweetsByUser(user_id, limit, offset),
+    await tweetModel.getTweetsByUser(user_id, limit, offset, sort),
     await tweetModel.totalTweets(user_id),
   ]);
 
@@ -36,6 +48,7 @@ const getUserTweets = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    sort,
     pagination,
     tweets: userTweets.rows,
   });

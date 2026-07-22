@@ -44,7 +44,8 @@ const getUserByUsername = async (name, user_id) => {
 
 // tweets feed model
 
-const tweetsFeed = async (user_id, offset, limit) => {
+const tweetsFeed = async (user_id, offset, limit, sort) => {
+  const order = sort === "latest" ? "DESC" : "ASC";
   const query = `
         SELECT
             t.tweet_id,
@@ -76,7 +77,7 @@ const tweetsFeed = async (user_id, offset, limit) => {
             u.user_id,
             u.name
         ORDER BY 
-            t.posted_at DESC
+            t.posted_at ${order}
         OFFSET $2
         LIMIT $3
        ;
@@ -100,4 +101,4 @@ const countResult = async (user_id) => {
   return pool.query(query, [user_id]);
 };
 
-module.exports = { getUserByEmail, getUserByUsername, tweetsFeed,countResult };
+module.exports = { getUserByEmail, getUserByUsername, tweetsFeed, countResult };
