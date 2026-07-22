@@ -1,6 +1,8 @@
 const followerModel = require("../models/followerModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/AppError");
+const { paginationMetadata } = require("../utils/paginationMetadata");
+const pool = require("../config/db");
 
 //follower API
 
@@ -44,13 +46,22 @@ const unfollowUser = catchAsync(async (req, res, next) => {
 
 const getFollowingUsers = catchAsync(async (req, res, next) => {
   const follower_user_id = req.user_id;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
 
-  const result = await followerModel.getFollowingUsers(follower_user_id);
-  if (result.rowCount === 0) {
-    return next(new AppError("You are not following any user yet", 200));
-  }
+  const [result, totalFollowing] = await Promise.all([
+    await followerModel.getFollowingUsers(follower_user_id, limit, offset),
+    await followerModel.getTotalFollowing(follower_user_id),
+  ]);
+
+  const totalItems = totalFollowing.rows[0].total;
+
+  const pagination = await paginationMetadata(page, limit, totalItems);
+
   res.status(200).json({
     success: true,
+    pagination,
     followingUsers: result.rows,
   });
 });
@@ -59,14 +70,23 @@ const getFollowingUsers = catchAsync(async (req, res, next) => {
 
 const getFollowedUsers = catchAsync(async (req, res, next) => {
   const follower_user_id = req.user_id;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
 
-  const result = await followerModel.getFollowedUsers(follower_user_id);
-  if (result.rowCount === 0) {
-    return next(new AppError("You are not followed by any user yet", 200));
-  }
+  const [result, totalFollowers] = await Promise.all([
+    await followerModel.getFollowedUsers(follower_user_id, limit, offset),
+    await followerModel.getTotalFollowers(follower_user_id),
+  ]);
+
+  const totalItems = totalFollowers.rows[0].total;
+
+  const pagination = await paginationMetadata(page, limit, totalItems);
+
   res.status(200).json({
     success: true,
-    follwers: result.rows,
+    pagination,
+    followers: result.rows,
   });
 });
 

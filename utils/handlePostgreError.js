@@ -1,7 +1,7 @@
 const AppError = require("./AppError");
 
 const handlePostgreError = (err) => {
-  switch (err.code === "23505") {
+  switch (err.code) {
     case "23505":
       return new AppError("Email Already Exists", 409);
     case "23503":

@@ -44,7 +44,7 @@ const getUserByUsername = async (name, user_id) => {
 
 // tweets feed model
 
-const tweetsFeed = async (user_id) => {
+const tweetsFeed = async (user_id, offset, limit) => {
   const query = `
         SELECT
             t.tweet_id,
@@ -77,9 +77,27 @@ const tweetsFeed = async (user_id) => {
             u.name
         ORDER BY 
             t.posted_at DESC
-        LIMIT 10;
+        OFFSET $2
+        LIMIT $3
+       ;
     `;
-  return await pool.query(query, [user_id]);
+  return await pool.query(query, [user_id, offset, limit]);
 };
 
-module.exports = { getUserByEmail, getUserByUsername, tweetsFeed };
+const countResult = async (user_id) => {
+  const query = `
+        SELECT 
+            COUNT(*)::INTEGER AS total
+        FROM 
+            tweettable t
+        INNER JOIN 
+            followertable f
+        ON 
+            t.user_id = f.following_user_id
+        WHERE 
+            f.follower_user_id = $1;
+        `;
+  return pool.query(query, [user_id]);
+};
+
+module.exports = { getUserByEmail, getUserByUsername, tweetsFeed,countResult };

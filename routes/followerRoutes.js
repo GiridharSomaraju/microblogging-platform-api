@@ -14,7 +14,10 @@ const {
 } = require("../controllers/followerController");
 
 // validation
-const { followUserValidation } = require("../validators/followerValidation");
+const {
+  followUserValidation,
+  followValidation,
+} = require("../validators/followerValidation");
 
 // validation middleware
 const { validate } = require("../middleware/validate");
@@ -73,7 +76,7 @@ const { validate } = require("../middleware/validate");
  *         description: Authentication token is missing or invalid
  *       404:
  *         description: User not found
- */ 
+ */
 
 router
   .route("/users/:userId/follow")
@@ -112,7 +115,19 @@ router
  *         description: Authentication token is missing or invalid
  */
 
-router.get("/users/me/following", authMiddleware, getFollowingUsers);
-router.get("/users/me/followers", authMiddleware, getFollowedUsers);
+router.get(
+  "/users/me/following",
+  authMiddleware,
+  followValidation,
+  validate,
+  getFollowingUsers,
+);
+router.get(
+  "/users/me/followers",
+  authMiddleware,
+  followValidation,
+  validate,
+  getFollowedUsers,
+);
 
 module.exports = router;

@@ -27,6 +27,17 @@ const getTweetsByUser = async (user_id, limit, offset) => {
   return await pool.query(query, [user_id, offset, limit]);
 };
 
+const totalTweets = async (user_id) => {
+  const query = `
+      SELECT 
+        COUNT(*):: INTEGER AS total
+      FROM 
+        tweettable
+      WHERE 
+        user_id = $1 AND isdeleted = FALSE `;
+  return pool.query(query, [user_id]);
+};
+
 // delete tweet model
 const deleteTweetByUser = async (tweetId, user_id) => {
   const query = `
@@ -42,7 +53,7 @@ const deleteTweetByUser = async (tweetId, user_id) => {
 };
 
 // delete multiple tweets model
-const deleteMultipleTweetsByUser = async (tweetId,user_id) => {
+const deleteMultipleTweetsByUser = async (tweetId, user_id) => {
   const query = `
     UPDATE 
         tweettable 
@@ -55,4 +66,10 @@ const deleteMultipleTweetsByUser = async (tweetId,user_id) => {
   return await pool.query(query, [tweetId, user_id]);
 };
 
-module.exports = { insertUserTweet, getTweetsByUser, deleteTweetByUser,deleteMultipleTweetsByUser };
+module.exports = {
+  insertUserTweet,
+  getTweetsByUser,
+  totalTweets,
+  deleteTweetByUser,
+  deleteMultipleTweetsByUser,
+};

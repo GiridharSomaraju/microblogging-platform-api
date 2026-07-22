@@ -1,19 +1,19 @@
-const pool = require("../config/db")
+const pool = require("../config/db");
 
 // follow user model
 
-const followUser = async(follower_user_id,userId) => {
-    const query = `
+const followUser = async (follower_user_id, userId) => {
+  const query = `
     INSERT INTO 
         followertable(follower_user_id,following_user_id)
         VALUES($1,$2)`;
-    return await pool.query(query, [follower_user_id, userId]);
-}
+  return await pool.query(query, [follower_user_id, userId]);
+};
 
-// unfollow user model 
+// unfollow user model
 
-const getFollowUser = async(follower_user_id,userId) => {
-     const query = `
+const getFollowUser = async (follower_user_id, userId) => {
+  const query = `
      SELECT
         * 
      FROM 
@@ -22,11 +22,11 @@ const getFollowUser = async(follower_user_id,userId) => {
         follower_user_id = $1 
     AND 
         following_user_id = $2;`;
-    return await pool.query(query, [follower_user_id, userId]);
-}
+  return await pool.query(query, [follower_user_id, userId]);
+};
 
-const unfollowUser = async(follower_user_id,userId) => {
-    const query = `
+const unfollowUser = async (follower_user_id, userId) => {
+  const query = `
     DELETE FROM 
         followertable 
     WHERE 
@@ -34,13 +34,13 @@ const unfollowUser = async(follower_user_id,userId) => {
     AND 
         following_user_id = $2`;
 
-    return  await pool.query(query, [follower_user_id, userId]);
-}
+  return await pool.query(query, [follower_user_id, userId]);
+};
 
 // following users models
 
-const getFollowingUsers = async(follower_user_id) => {
-    const query = `
+const getFollowingUsers = async (follower_user_id, limit, offset) => {
+  const query = `
     SELECT 
         u.user_id,
         u.name 
@@ -51,14 +51,33 @@ const getFollowingUsers = async(follower_user_id) => {
     ON 
         f.following_user_id = u.user_id
     WHERE 
+        follower_user_id = $1
+    ORDER BY
+        u.user_id
+    LIMIT $2
+    OFFSET $3`;
+  return await pool.query(query, [follower_user_id, limit, offset]);
+};
+
+const getTotalFollowing = async (follower_user_id) => {
+  const query = `
+    SELECT 
+        COUNT(*):: INTEGER AS total
+    FROM 
+        followertable f 
+    INNER JOIN 
+        usertable u 
+    ON 
+        f.following_user_id = u.user_id
+    WHERE 
         follower_user_id = $1`;
-    return await pool.query(query, [follower_user_id]);
-}
+  return pool.query(query, [follower_user_id]);
+};
 
 // followed users models
 
-const getFollowedUsers = async(follower_user_id) => {
-    const query = `
+const getFollowedUsers = async (follower_user_id, limit, offset) => {
+  const query = `
     SELECT 
         u.user_id,
         u.name 
@@ -69,11 +88,36 @@ const getFollowedUsers = async(follower_user_id) => {
     ON 
         f.follower_user_id = u.user_id
     WHERE 
+        following_user_id = $1
+    ORDER BY
+        u.user_id
+    LIMIT $2
+    OFFSET $3`;
+
+  return await pool.query(query, [follower_user_id, limit, offset]);
+};
+
+const getTotalFollowers = async (follower_user_id) => {
+  const query = `
+    SELECT 
+        COUNT(*):: INTEGER AS total
+    FROM 
+        followertable f 
+    INNER JOIN 
+        usertable u 
+    ON 
+        f.follower_user_id = u.user_id
+    WHERE 
         following_user_id = $1`;
-    
-    return await pool.query(query, [follower_user_id]);
-}
+  return pool.query(query, [follower_user_id]);
+};
 
-
-
-module.exports = {followUser,getFollowUser,unfollowUser,getFollowingUsers,getFollowedUsers}
+module.exports = {
+  followUser,
+  getFollowUser,
+  unfollowUser,
+  getFollowingUsers,
+  getTotalFollowing,
+  getFollowedUsers,
+  getTotalFollowers,
+};

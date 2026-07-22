@@ -17,6 +17,7 @@ const {
 const {
   getUserProfileValidation,
   profileSearchValidation,
+  feedValidation,
 } = require("../validators/profileValidator");
 
 // validation middleware
@@ -123,6 +124,6 @@ router.get(
  *       401:
  *         description: Authentication token is missing or invalid
  */
-router.get("/feed", authMiddleware, tweetsFeed);
+router.get("/feed", authMiddleware, feedValidation, validate, tweetsFeed);
 
 module.exports = router;
