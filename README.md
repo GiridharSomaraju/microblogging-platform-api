@@ -84,7 +84,7 @@ microblogging-platform-api/
 │   ├── config/
 │   │   └── db.js                # PostgreSQL connection pool
 │   ├── controllers/
-│   │   ├── authController.js
+│   │   ├── profileController.js
 │   │   ├── userController.js
 │   │   ├── tweetController.js
 │   │   ├── replyController.js
@@ -101,7 +101,7 @@ microblogging-platform-api/
 │   │   ├── likeModel.js
 │   │   └── followModel.js
 │   ├── routes/
-│   │   ├── authRoutes.js
+│   │   ├── profileRoutes.js
 │   │   ├── userRoutes.js
 │   │   ├── tweetRoutes.js
 │   │   ├── feedRoutes.js
@@ -227,58 +227,58 @@ Passwords are never stored in plain text — they're hashed with `bcrypt` before
 
 ### Authentication
 
-| Method | Endpoint         | Description              | Auth Required |
-| ------ | ---------------- | ------------------------ | ------------- |
-| POST   | `/auth/register` | Register a new user      | ❌            |
-| POST   | `/auth/login`    | Log in and receive a JWT | ❌            |
+| Method | Endpoint                | Description              | Auth Required |
+| ------ | ----------------------- | ------------------------ | ------------- |
+| POST   | `/api/v1/auth/register` | Register a new user      | ❌            |
+| POST   | `/api/v1//auth/login`   | Log in and receive a JWT | ❌            |
 
 ### Users
 
-| Method | Endpoint                  | Description                          | Auth Required |
-| ------ | ------------------------- | ------------------------------------ | ------------- |
-| GET    | `/users/me`               | Get current logged-in user's profile | ✅            |
-| GET    | `/users/:userId`          | Get a specific user's public profile | ✅            |
-| GET    | `/users/search?name=john` | Search users by name                 | ✅            |
+| Method | Endpoint                          | Description                          | Auth Required |
+| ------ | --------------------------------- | ------------------------------------ | ------------- |
+| GET    | `/api/v1//users/me`               | Get current logged-in user's profile | ✅            |
+| GET    | `/api/v1//users/:userId`          | Get a specific user's public profile | ✅            |
+| GET    | `/api/v1//users/search?name=john` | Search users by name                 | ✅            |
 
 ### Tweets
 
-| Method | Endpoint                    | Description                   | Auth Required |
-| ------ | --------------------------- | ----------------------------- | ------------- |
-| POST   | `/users/me/tweets`          | Create a new tweet            | ✅            |
-| GET    | `/users/me/tweets`          | Get current user's tweets     | ✅            |
-| DELETE | `/users/me/tweets/:tweetId` | Delete a single tweet         | ✅            |
-| DELETE | `/users/me/tweets`          | Delete multiple tweets (bulk) | ✅            |
+| Method | Endpoint                            | Description                   | Auth Required |
+| ------ | ----------------------------------- | ----------------------------- | ------------- |
+| POST   | `/api/v1//users/me/tweets`          | Create a new tweet            | ✅            |
+| GET    | `/api/v1//users/me/tweets`          | Get current user's tweets     | ✅            |
+| DELETE | `/api/v1//users/me/tweets/:tweetId` | Delete a single tweet         | ✅            |
+| DELETE | `/api/v1//users/me/tweets`          | Delete multiple tweets (bulk) | ✅            |
 
 ### Feed
 
-| Method | Endpoint | Description                               | Auth Required |
-| ------ | -------- | ----------------------------------------- | ------------- |
-| GET    | `/feed`  | Get personalized feed from followed users | ✅            |
+| Method | Endpoint        | Description                               | Auth Required |
+| ------ | --------------- | ----------------------------------------- | ------------- |
+| GET    | `/api/v1//feed` | Get personalized feed from followed users | ✅            |
 
 ### Followers
 
-| Method | Endpoint                | Description                         | Auth Required |
-| ------ | ----------------------- | ----------------------------------- | ------------- |
-| POST   | `/users/:userId/follow` | Follow a user                       | ✅            |
-| DELETE | `/users/:userId/follow` | Unfollow a user                     | ✅            |
-| GET    | `/users/me/followers`   | List current user's followers       | ✅            |
-| GET    | `/users/me/following`   | List users the current user follows | ✅            |
+| Method | Endpoint                        | Description                         | Auth Required |
+| ------ | ------------------------------- | ----------------------------------- | ------------- |
+| POST   | `/api/v1//users/:userId/follow` | Follow a user                       | ✅            |
+| DELETE | `/api/v1//users/:userId/follow` | Unfollow a user                     | ✅            |
+| GET    | `/api/v1//users/me/followers`   | List current user's followers       | ✅            |
+| GET    | `/api/v1//users/me/following`   | List users the current user follows | ✅            |
 
 ### Likes
 
-| Method | Endpoint                 | Description                  | Auth Required |
-| ------ | ------------------------ | ---------------------------- | ------------- |
-| POST   | `/tweets/:tweetId/like`  | Like a tweet                 | ✅            |
-| DELETE | `/tweets/:tweetId/like`  | Unlike a tweet               | ✅            |
-| GET    | `/tweets/:tweetId/likes` | List users who liked a tweet | ✅            |
+| Method | Endpoint                         | Description                  | Auth Required |
+| ------ | -------------------------------- | ---------------------------- | ------------- |
+| POST   | `/api/v1//tweets/:tweetId/like`  | Like a tweet                 | ✅            |
+| DELETE | `/api/v1//tweets/:tweetId/like`  | Unlike a tweet               | ✅            |
+| GET    | `/api/v1//tweets/:tweetId/likes` | List users who liked a tweet | ✅            |
 
 ### Replies
 
-| Method | Endpoint                   | Description                | Auth Required |
-| ------ | -------------------------- | -------------------------- | ------------- |
-| POST   | `/tweets/:tweetId/replies` | Reply to a tweet           | ✅            |
-| GET    | `/tweets/:tweetId/replies` | Get all replies to a tweet | ✅            |
-| DELETE | `/replies/:replyId`        | Delete a reply             | ✅            |
+| Method | Endpoint                           | Description                | Auth Required |
+| ------ | ---------------------------------- | -------------------------- | ------------- |
+| POST   | `/api/v1//tweets/:tweetId/replies` | Reply to a tweet           | ✅            |
+| GET    | `/api/v1//tweets/:tweetId/replies` | Get all replies to a tweet | ✅            |
+| DELETE | `/api/v1//replies/:replyId`        | Delete a reply             | ✅            |
 
 ## 🚀 Deployment
 
